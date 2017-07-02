@@ -1,4 +1,4 @@
-# Gaamit
+# Gaamit Frontend
 
 ![gaamit](screen.png)
 
