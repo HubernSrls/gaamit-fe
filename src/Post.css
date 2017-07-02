@@ -1,0 +1,19 @@
+.gaamit-post-image {
+  height: 8em !important;
+  object-fit: cover;
+}
+
+.gaamit-post {
+  cursor: pointer;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  background-color: transparent !important;
+}
+
+.gaamit-post-inner {
+  background-color: #fff;
+}
+
+.gaamit-card-title {
+  min-height: 3rem;
+}
