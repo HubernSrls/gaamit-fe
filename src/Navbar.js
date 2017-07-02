@@ -25,14 +25,14 @@ export default class Navbar extends Component {
                 </li>
               </ul>
 
-              <form className="form-inline my-2 my-lg-0">
+              {/*<form className="form-inline my-2 my-lg-0">
                 <input id="gaamit-search" className="form-control mr-sm-2" type="text" placeholder="Search"/>
                 <div id="gaamit-btn-search" className="fa fa-search"/>
-              </form>
+              </form>*/}
 
               <img className="rounded-circle img-circle-nav ml-3 mr-3" src="http://teamzone-gaming.com/wp-content/uploads/2016/05/Durotan-Warcraft.0.0.jpg" alt="" onClick={() => this.props.changePage('profile')}/>
 
-              <Button outline id="gaamit-btn-post" color="primary" className="pt-2 pb-2">New Post</Button>
+              <Button outline id="gaamit-btn-post" color="primary" className="pt-2 pb-2" onClick={() => this.props.changePage('editor')}>New Post</Button>
 
             </div>
           </div>

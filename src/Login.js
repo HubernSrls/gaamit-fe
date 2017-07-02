@@ -1,24 +1,118 @@
 import React, { Component } from 'react';
+import { Alert } from 'reactstrap';
+import Loading from './Loading.js';
 import './Login.css';
+import Api from './Api.js';
 
 export default class Login extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      email: '',
+      password: '',
+      loading: false,
+      showWrongCredentials: false
+    };
+  }
+
+  componentWillMount = () => {
+    document.addEventListener('keyup', this.onKeyUp, false);
+  }
+
+  componentWillUnmount = () => {
+    document.removeEventListener('keyup', this.onKeyUp, false);
+  }
+
+  onKeyUp = (e) => {
+    // ENTER
+    if (e.key === 'Enter') {
+      this.onClickLogin();
+    }
+  }
+
+  handleChangeEmail = () => {
+    this.setState({
+      email: this.inputEmail.value
+    });
+  }
+
+  handleChangePassword = () => {
+    this.setState({
+      password: this.inputPassword.value
+    });
+  }
+
+  onClickLogin = () => {
+    this.setState({ loading: true });
+
+    let params = {
+      username: this.state.email,
+      password: this.state.password
+    }
+
+    Api.post(
+      Api.methods.login,
+      params,
+      (responseJson) => {
+
+        this.setState({ loading: false });
+
+        let userData = {
+          id: responseJson._id,
+          username: responseJson.username,
+          postingKey: responseJson.postingKey
+        };
+
+        this.props.setUserData(userData);
+
+      },
+      (error) => {
+        this.setState({
+          loading: false,
+          showWrongCredentials: true
+        });
+      });
+  }
 
   render() {
+
+    let wrongCredentialsAlert =
+      <div className="mt-3">
+        <Alert color="danger">
+          <strong>Ops!</strong> Wrong username and/or password, please try again.
+        </Alert>
+      </div>;
+
     return (
-        <div id="gaamit-posts" className="container col-md-8 mt-3">
+        <div className="container col-md-8 mt-3">
             <div className="card gaamit-card">
               <div className="card-block">
                 <h4 className="card-title">Join Gaamit!</h4>
-                  <form className="form-signin">
-                    <input type="text" className="form-control" placeholder="Email" required autoFocus/>
-                    <input type="password" className="form-control" placeholder="Password" required/>
-                    <button className="btn btn-lg btn-primary btn-block mt-3 gaamit-login-btn" type="submit">Log in</button>
-                    <h3 className="card-text mt-3 mb-3">Or</h3>
-                    <button className="btn btn-lg btn-primary btn-block mt-3 gaamit-login-btn" type="submit">Sign up</button>
-                    <a href="#" className="pull-right need-help mt-3">Forgot password? </a><span className="clearfix"></span>
-                  </form>
+                  <input id="inputEmail"
+                         type="text"
+                         className="form-control mb-2"
+                         placeholder="Email"
+                         required
+                         autoFocus
+                         onChange={this.handleChangeEmail}
+                         ref={(input) => this.inputEmail = input}/>
+                  <input id="inputPassword"
+                         type="password"
+                         className="form-control"
+                         placeholder="Password"
+                         required
+                         onChange={this.handleChangePassword}
+                         ref={(input) => this.inputPassword = input}/>
+                  <button className="btn btn-lg btn-primary btn-block mt-3 gaamit-login-btn" onClick={() => this.onClickLogin()}>Log in</button>
+
+                  {this.state.showWrongCredentials ? wrongCredentialsAlert : null}
+                  {/*<h3 className="card-text mt-3 mb-3">Or</h3>
+                  <button className="btn btn-lg btn-primary btn-block mt-3 gaamit-login-btn" type="submit">Sign up</button>
+                  <a href="#" className="pull-right need-help mt-3">Forgot password? </a><span className="clearfix"></span>*/}
               </div>
             </div>
+            {this.state.loading ? <Loading/> : null}
           </div>
     );
   }

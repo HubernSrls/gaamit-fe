@@ -10,6 +10,8 @@ import Login from './Login.js';
 import ProfileCard from './ProfileCard.js';
 import NetworkCard from './NetworkCard.js';
 import ProfilePage from './ProfilePage.js';
+import EditorPage from './EditorPage.js';
+import UserSettings from './UserSettings.js';
 import Footer from './Footer.js';
 import './App.css';
 
@@ -20,12 +22,13 @@ class App extends Component {
     this.state = {
       page: '',
       feed: null,
-      postContent: ''
+      postContent: '',
+      userData: null
     }
   }
 
   componentDidMount = () => {
-    this.changePage('profile');
+    this.changePage('settings');
   }
 
   changePage= (newPage, params) => {
@@ -62,26 +65,35 @@ class App extends Component {
     });
   }
 
+  setUserData = (data) => {
+    this.setState({
+      userData: data
+    });
+  }
+
   render() {
 
     // Current page
     let pageTag;
     let toggleJumbo = true;
+    let toggleFooter = false;
     if (this.state.page === 'created' || this.state.page === 'hot' || this.state.page === 'trending') {
       pageTag =
-      <div className="row">
-        <div className="hidden-xs-down col-md-3">
-          <ProfileCard changePage={this.changePage}/>
-        </div>
-        <div className="col-md-6 p-0">
-          <Posts page={this.state.page}
-                 changePage={this.changePage}
-                 feed={this.state.feed}/>
+        <div className="row">
+          <div className="hidden-xs-down col-md-3">
+            <ProfileCard changePage={this.changePage}/>
           </div>
-        <div className="hidden-xs-down col-md-3">
-          <NetworkCard/>
+          <div className="col-md-6 p-0">
+            <Posts page={this.state.page}
+                   changePage={this.changePage}
+                   feed={this.state.feed}/>
+            </div>
+          <div className="hidden-xs-down col-md-3">
+            <NetworkCard/>
+          </div>
         </div>
-      </div>
+
+      toggleFooter = true;
 
     } else if (this.state.page === 'info') {
       pageTag = <Info/>
@@ -95,10 +107,14 @@ class App extends Component {
                                body={postContentBody}/>
       }
     } else if (this.state.page === 'login') {
-      pageTag = <Login/>
+      pageTag = <Login setUserData={this.setUserData}/>
       toggleJumbo = false;
     } else if (this.state.page === 'profile') {
       pageTag = <ProfilePage changePage={this.changePage}/>
+    } else if (this.state.page === 'editor') {
+      pageTag = <EditorPage/>
+    } else if (this.state.page === 'settings') {
+      pageTag = <UserSettings/>
     }
 
     return (
@@ -107,7 +123,7 @@ class App extends Component {
         <div id="gaamit-main-container" className="container mb-5">
           {pageTag}
         </div>
-        <Footer/>
+        { toggleFooter ? <Footer/> : null }
       </div>
     );
   }

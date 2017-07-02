@@ -1,0 +1,11 @@
+#settings-profile-img {
+  margin: 0 auto;
+  width: 128px;
+  height: 128px;
+  object-fit: cover;
+}
+
+#settings-banner-img {
+  height: 24rem;
+  object-fit: cover
+}

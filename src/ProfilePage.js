@@ -15,7 +15,7 @@ export default class ProfilePage extends Component {
             <img id="profile-avatar" className="rounded-circle" src="http://teamzone-gaming.com/wp-content/uploads/2016/05/Durotan-Warcraft.0.0.jpg"/>
             <h1 id="profile-title">Mike <small>@mikepicker</small></h1>
           </div>
-          <Button id="profile-follow" outline color="primary" className="gaamit-button mr-1 mb-1">Follow</Button>
+          <Button id="profile-follow-settings" outline color="primary" className="gaamit-button mr-1 mb-1" onClick={() => this.props.changePage('settings')}>Settings</Button>
         </div>
 
         <div id="profile-sub-banner"/>
