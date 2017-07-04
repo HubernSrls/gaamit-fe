@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Header from './Header.js';
-import Navbar from './Navbar.js';
+import GaamitNavbar from './GaamitNavbar.js';
 import Jumbotron from './Jumbotron.js';
 import Sidebar from './Sidebar.js';
 import Posts from './Posts.js'
@@ -13,6 +13,7 @@ import ProfilePage from './ProfilePage.js';
 import EditorPage from './EditorPage.js';
 import UserSettings from './UserSettings.js';
 import Footer from './Footer.js';
+import steem from 'steem';
 import './App.css';
 
 class App extends Component {
@@ -28,7 +29,7 @@ class App extends Component {
   }
 
   componentDidMount = () => {
-    this.changePage('settings');
+    this.changePage('created');
   }
 
   changePage= (newPage, params) => {
@@ -55,6 +56,14 @@ class App extends Component {
   }
 
   fetchCategory = (category) => {
+
+    steem.api.getDiscussionsByCreated({
+      limit: 10,
+      tag: 'gamedev'
+    }, function(err, result) {
+    	console.log(err, result);
+    });
+
     fetch(`https://api.steemjs.com/getState?path=/${category}/gamedev`).then((response) => {
       return response.json();
     }).then((json) => {console.log(json);
@@ -119,8 +128,8 @@ class App extends Component {
 
     return (
       <div className="App">
-        <Navbar page={this.state.page} changePage={this.changePage}/>
-        <div id="gaamit-main-container" className="container mb-5">
+        <GaamitNavbar page={this.state.page} changePage={this.changePage}/>
+        <div className="container mb-5 mt-4">
           {pageTag}
         </div>
         { toggleFooter ? <Footer/> : null }

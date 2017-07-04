@@ -1,8 +1,8 @@
 const baseURL = 'https://gaamitbe.herokuapp.com';
-const oauthURL = 'http://oauth2.testmeapp.com';
+const oauthURL = 'https://stagingoauth2.promoincloud.com';
 
-const CLIENT_ID = 'watma01';
-const CLIENT_SECRET = 'k7k654j5j34kk3e12n3ernf2dqwdhqwghfqewdtg';
+const CLIENT_ID = 'gaamit';
+const CLIENT_SECRET = 'ijxja4dj31lszdk4axqvt99bo4ryk50hp6ol8lbc';
 
 const oauth = (response) => {
 
