@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Button } from 'reactstrap';
 import Header from './Header.js';
 import GaamitNavbar from './GaamitNavbar.js';
 import Jumbotron from './Jumbotron.js';
@@ -24,22 +25,31 @@ class App extends Component {
       page: '',
       feed: null,
       postContent: '',
-      userData: null
+      userData: null,
+      lastPermlink: '',
+      lastAuthor: ''
     }
   }
 
   componentDidMount = () => {
     this.changePage('created');
+
+    window.onscroll = (ev) => {
+      if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+          this.fetchCategory(this.state.page, this.state.lastPermlink, this.state.lastAuthor);
+      }
+    };
+
   }
 
   changePage= (newPage, params) => {
 
     // Feed categories
     if (newPage === 'created' || newPage === 'hot' || newPage === 'trending') {
-      this.fetchCategory(newPage);
       this.setState({
         feed: null
       });
+      this.fetchCategory(newPage);
     }
 
     // Show post content
@@ -55,23 +65,71 @@ class App extends Component {
 
   }
 
-  fetchCategory = (category) => {
 
-    steem.api.getDiscussionsByCreated({
-      limit: 10,
-      tag: 'gamedev'
-    }, function(err, result) {
-    	console.log(err, result);
-    });
+  fetchCategory = (category, startPost, startAuthor) => {
 
-    fetch(`https://api.steemjs.com/getState?path=/${category}/gamedev`).then((response) => {
+    let currentFeed = this.state.feed;
+    let limit = startPost ? 13 : 12;
+
+    console.log(startAuthor);
+    let callback = (err, result) => {
+
+      if (!result) {
+        return;
+      }
+      
+      if (!currentFeed) {
+        currentFeed = result
+      } else {
+        currentFeed.splice(-1,1);
+        currentFeed = currentFeed.concat(result);
+      }
+
+      this.setState({
+        feed: currentFeed,
+        lastPermlink: result[11].permlink,
+        lastAuthor: result[11].author
+      });
+    }
+
+    switch (category) {
+
+      case 'created':
+        steem.api.getDiscussionsByCreated({
+          limit: limit,
+          tag: 'gamedev',
+          start_author: startAuthor,
+          start_permlink: startPost
+        }, callback);
+        break;
+
+      case 'hot':
+        steem.api.getDiscussionsByHot({
+          limit: limit,
+          tag: 'gamedev',
+          start_author: startAuthor,
+          start_permlink: startPost
+        }, callback);
+        break;
+
+      case 'trending':
+        steem.api.getDiscussionsByTrending({
+          limit: limit,
+          tag: 'gamedev',
+          start_author: startAuthor,
+          start_permlink: startPost
+        }, callback);
+        break;
+    }
+
+    /*fetch(`https://api.steemjs.com/getState?path=/${category}/gamedev`).then((response) => {
       return response.json();
     }).then((json) => {console.log(json);
 
       this.setState({
         feed: json.content
       });
-    });
+    });*/
   }
 
   setUserData = (data) => {
@@ -86,19 +144,25 @@ class App extends Component {
     let pageTag;
     let toggleJumbo = true;
     let toggleFooter = false;
+
+    let profileCard = <ProfileCard changePage={this.changePage}/>
+    let networkCard = <NetworkCard/>
+
     if (this.state.page === 'created' || this.state.page === 'hot' || this.state.page === 'trending') {
       pageTag =
         <div className="row">
           <div className="hidden-xs-down col-md-3">
-            <ProfileCard changePage={this.changePage}/>
+            {this.props.userData ? profileCard : null}
           </div>
+
           <div className="col-md-6 p-0">
             <Posts page={this.state.page}
                    changePage={this.changePage}
                    feed={this.state.feed}/>
-            </div>
+          </div>
+
           <div className="hidden-xs-down col-md-3">
-            <NetworkCard/>
+            {this.props.userData ? networkCard : null}
           </div>
         </div>
 
@@ -128,7 +192,7 @@ class App extends Component {
 
     return (
       <div className="App">
-        <GaamitNavbar page={this.state.page} changePage={this.changePage}/>
+        <GaamitNavbar page={this.state.page} changePage={this.changePage} userData={this.state.userData}/>
         <div className="container mb-5 mt-4">
           {pageTag}
         </div>

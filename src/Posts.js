@@ -21,9 +21,10 @@ export default class Posts extends Component {
     return (
       <div className="card gaamit-card pt-2 pb-2 mb-3">
         <ul className="nav nav-pills justify-content-center">
-          <li className="nav-item">
-            <div className={'nav-link ' + (this.props.page === 'home' ? 'active' : null)} onClick={(e) => this.onClickTab(e, 'created')}>Home</div>
-          </li>
+          {this.props.userData ?
+            <li className="nav-item">
+              <div className={'nav-link ' + (this.props.page === 'home' ? 'active' : null)} onClick={(e) => this.onClickTab(e, 'created')}>Home</div>
+            </li> : null}
           <li className="nav-item">
             <div className={'nav-link ' + (this.props.page === 'created' ? 'active' : null)} onClick={(e) => this.onClickTab(e, 'created')}>New</div>
           </li>
@@ -46,7 +47,7 @@ export default class Posts extends Component {
       let data = this.props.feed[content];
 
       // Filter non-english
-      if (data && !data.body.match(/[^\x00-\x7F]+/g)) {
+      //if (data && !data.body.match(/[^\x00-\x7F]+/g)) {
         posts.push(
           <div key={key++} className="col-6 col-md-6 col-lg-4 p-0">
             <Post id={content}
@@ -57,7 +58,7 @@ export default class Posts extends Component {
                   body={data.body}
                   changePage={this.props.changePage}/>
           </div>);
-      }
+      //}
     }
 
     // Loading
@@ -69,7 +70,7 @@ export default class Posts extends Component {
       <div>
         {this.renderPills()}
         <div className="container mt-2">
-          <div className="row">
+          <div className="row" style={{ textAlign: 'center' }}>
             {posts}
           </div>
         </div>

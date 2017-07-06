@@ -2,6 +2,7 @@
   animation: loading-spin infinite 1s linear;
   height: 80px;
   margin-top: 256px;
+  margin-bottom: 512px;
 }
 
 @keyframes loading-spin {

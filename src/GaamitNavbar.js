@@ -20,6 +20,17 @@ export default class GaamitNavbar extends Component {
 
   render() {
 
+    let login =
+      <NavItem>
+        <NavLink onClick={() => this.props.changePage('info')}>How it works</NavLink>
+      </NavItem>
+
+    let profile =
+      <img className="rounded-circle img-circle-nav ml-3 hidden-xs-down" src="http://teamzone-gaming.com/wp-content/uploads/2016/05/Durotan-Warcraft.0.0.jpg" alt="" onClick={() => this.props.changePage('profile')}/>
+
+    let newPost =
+      <Button outline id="gaamit-btn-post" color="primary" className="ml-3 pt-2 pb-2 hidden-xs-down" onClick={() => this.props.changePage('editor')}>New Post</Button>
+
     return (
       <div id="gaamit-navbar">
         <div className="container">
@@ -28,9 +39,7 @@ export default class GaamitNavbar extends Component {
             <NavbarBrand onClick={() => this.props.changePage('created')}>Gaamit</NavbarBrand>
             <Collapse isOpen={this.state.isOpen} navbar>
               <Nav className="ml-auto" navbar>
-                <NavItem>
-                  <NavLink onClick={() => this.props.changePage('info')}>How it works</NavLink>
-                </NavItem>
+                {this.props.userData ? null : login}
                 <NavItem>
                   <NavLink onClick={() => this.props.changePage('login')}>Login</NavLink>
                 </NavItem>
@@ -50,9 +59,9 @@ export default class GaamitNavbar extends Component {
               <div id="gaamit-btn-search" className="fa fa-search"/>
             </form>*/}
 
-            <img className="rounded-circle img-circle-nav ml-3 mr-3 hidden-xs-down" src="http://teamzone-gaming.com/wp-content/uploads/2016/05/Durotan-Warcraft.0.0.jpg" alt="" onClick={() => this.props.changePage('profile')}/>
+            {this.props.userData ? profile : null}
 
-            <Button outline id="gaamit-btn-post" color="primary" className="pt-2 pb-2 hidden-xs-down" onClick={() => this.props.changePage('editor')}>New Post</Button>
+            {this.props.userData ? newPost : null}
 
           </Navbar>
         </div>

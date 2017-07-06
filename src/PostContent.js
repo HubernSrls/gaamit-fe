@@ -10,7 +10,7 @@ export default class PostContent extends Component {
     let converter = new showdown.Converter();
     let text = this.props.body;
     let body = converter.makeHtml(this.props.body);
-    body = body.replace(/<img/gi, '<img class="img-fluid"');
+    body = body.replace(/<img/gi, '<br/><img class="img-fluid"');
 
     // Find images
     /*let re = /(\shttps?:\/\/.*\.(?:png|jpg|gif))/gi;

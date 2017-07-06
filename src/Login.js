@@ -3,6 +3,7 @@ import { Alert } from 'reactstrap';
 import Loading from './Loading.js';
 import './Login.css';
 import Api from './Api.js';
+import steem from 'steem';
 
 export default class Login extends Component {
   constructor(props) {
@@ -55,16 +56,14 @@ export default class Login extends Component {
       Api.methods.login,
       params,
       (responseJson) => {
-
-        this.setState({ loading: false });
-
+        console.log(responseJson);
         let userData = {
           id: responseJson._id,
           username: responseJson.username,
           postingKey: responseJson.postingKey
         };
 
-        this.props.setUserData(userData);
+        this.fetchSteemitData(userData);
 
       },
       (error) => {
@@ -73,6 +72,23 @@ export default class Login extends Component {
           showWrongCredentials: true
         });
       });
+  }
+
+  fetchSteemitData = (userData) => {
+    steem.api.getAccounts(['mikepicker'], (err, result) => {
+
+      let data = JSON.parse(result[0].json_metadata);
+      this.setState({ loading: false });
+      userData = {
+        'image': data.profile_image,
+        'location': data.location,
+        'website': data.website
+      };
+
+      console.log(userData);
+      this.props.setUserData(userData);
+
+    });
   }
 
   render() {
