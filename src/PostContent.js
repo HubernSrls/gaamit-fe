@@ -29,7 +29,7 @@ export default class PostContent extends Component {
           <h4 className="card-title">{this.props.title}</h4>
           <p className="card-title">By <a href={"https://steemit.com/@" + this.props.author}>{this.props.author}</a></p>
         </div>
-        <div className="card mb-3 gaamit-card pl-5 pr-5">
+        <div className="card mb-3 gaamit-card pl-5 pr-5 pt-5">
           <div dangerouslySetInnerHTML={{ __html: body}} style={{ textAlign: 'left' }}/>
         </div>
       </div>

@@ -12,7 +12,9 @@ export default class ProfileCard extends Component {
       confirmPassword: '',
       postingKey: '',
       loading: false,
-      showPasswordMismatch: false
+      showPasswordMismatch: false,
+      profileUrl: 'http://teamzone-gaming.com/wp-content/uploads/2016/05/Durotan-Warcraft.0.0.jpg',
+      bannerUrl: 'https://static.pexels.com/photos/443356/pexels-photo-443356.jpeg'
     };
   }
 
@@ -20,6 +22,26 @@ export default class ProfileCard extends Component {
     this.setState({
       postingKey: e.target.value
     });
+  }
+
+  handleChangeProfile = (e) => {
+
+    if (e.target.value.match(/(https?:\/\/.*\.(?:png|jpg))/i)) {
+      this.setState({
+        profileUrl: e.target.value
+      });
+    }
+
+  }
+
+  handleChangeBanner = (e) => {
+
+    if (e.target.value.match(/(https?:\/\/.*\.(?:png|jpg))/i)) {
+      this.setState({
+        bannerUrl: e.target.value
+      });
+    }
+
   }
 
   onClickSubmit = () => {
@@ -53,12 +75,28 @@ export default class ProfileCard extends Component {
       <div className="card gaamit-card p-3">
 
         <label htmlFor="settings-profile-img">Change Profile Picture</label>
-        <img id="settings-profile-img" className="rounded-circle" src="http://teamzone-gaming.com/wp-content/uploads/2016/05/Durotan-Warcraft.0.0.jpg" alt="profile pic"/>
+        <img id="settings-profile-img" className="rounded-circle" src={this.state.profileUrl} alt="profile pic"/>
+
+        <div id="input-profile-pic" className="mt-3 mb-3">
+
+          <InputGroup>
+            <Input placeholder="http//..." onChange={this.handleChangeProfile}/>
+          </InputGroup>
+
+        </div>
 
         <div className="mt-3 mb-3"/>
 
         <label htmlFor="settings-banner-img">Change Banner</label>
-        <img id="settings-banner-img" className="img-fluid" src="https://static.pexels.com/photos/443356/pexels-photo-443356.jpeg" alt="banner pic"/>
+        <img id="settings-banner-img" className="img-fluid" src={this.state.bannerUrl} alt="banner pic"/>
+
+        <div id="input-banner-pic" className="mt-3 mb-3">
+
+          <InputGroup>
+            <Input placeholder="http//..." onChange={this.handleChangeBanner}/>
+          </InputGroup>
+
+        </div>
 
         <div className="mt-3 mb-3"/>
 

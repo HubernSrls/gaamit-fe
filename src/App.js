@@ -32,7 +32,7 @@ class App extends Component {
   }
 
   componentDidMount = () => {
-    this.changePage('created');
+    this.changePage('login');
 
     window.onscroll = (ev) => {
       if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
@@ -77,7 +77,7 @@ class App extends Component {
       if (!result) {
         return;
       }
-      
+
       if (!currentFeed) {
         currentFeed = result
       } else {
@@ -183,7 +183,7 @@ class App extends Component {
       pageTag = <Login setUserData={this.setUserData}/>
       toggleJumbo = false;
     } else if (this.state.page === 'profile') {
-      pageTag = <ProfilePage changePage={this.changePage}/>
+      pageTag = <ProfilePage userData={this.props.userData} changePage={this.changePage}/>
     } else if (this.state.page === 'editor') {
       pageTag = <EditorPage/>
     } else if (this.state.page === 'settings') {

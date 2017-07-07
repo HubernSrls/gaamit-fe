@@ -36,23 +36,23 @@ export default class ProfilePage extends Component {
                   body={'<p>Hello</p>'}
                   changePage={this.props.changePage}/>
 
-              <Post key={1}
-                    id={1}
-                    title={'Development Blog - #1'}
-                    author={'Mike'}
-                    lastUpdate={'now'}
-                    image={['https://static.pexels.com/photos/163036/mario-luigi-yoschi-figures-163036.jpeg']}
-                    body={'<p>Hello</p>'}
-                    changePage={this.props.changePage}/>
+            <Post key={1}
+                  id={1}
+                  title={'Development Blog - #1'}
+                  author={'Mike'}
+                  lastUpdate={'now'}
+                  image={['https://static.pexels.com/photos/163036/mario-luigi-yoschi-figures-163036.jpeg']}
+                  body={'<p>Hello</p>'}
+                  changePage={this.props.changePage}/>
 
-                <Post key={2}
-                      id={1}
-                      title={'Title'}
-                      author={'Mike'}
-                      lastUpdate={'now'}
-                      image={['https://static.pexels.com/photos/443356/pexels-photo-443356.jpeg']}
-                      body={'<p>Hello</p>'}
-                      changePage={this.props.changePage}/>
+            <Post key={2}
+                  id={1}
+                  title={'Title'}
+                  author={'Mike'}
+                  lastUpdate={'now'}
+                  image={['https://static.pexels.com/photos/443356/pexels-photo-443356.jpeg']}
+                  body={'<p>Hello</p>'}
+                  changePage={this.props.changePage}/>
           </div>
 
           <div className="col-md-4">

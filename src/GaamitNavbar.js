@@ -22,11 +22,11 @@ export default class GaamitNavbar extends Component {
 
     let login =
       <NavItem>
-        <NavLink onClick={() => this.props.changePage('info')}>How it works</NavLink>
+        <NavLink onClick={() => this.props.changePage('login')}>Login</NavLink>
       </NavItem>
 
     let profile =
-      <img className="rounded-circle img-circle-nav ml-3 hidden-xs-down" src="http://teamzone-gaming.com/wp-content/uploads/2016/05/Durotan-Warcraft.0.0.jpg" alt="" onClick={() => this.props.changePage('profile')}/>
+      <img className="rounded-circle img-circle-nav hidden-xs-down ml-3" src={this.props.userData ? this.props.userData.image : ''} alt="" onClick={() => this.props.changePage('profile')}/>
 
     let newPost =
       <Button outline id="gaamit-btn-post" color="primary" className="ml-3 pt-2 pb-2 hidden-xs-down" onClick={() => this.props.changePage('editor')}>New Post</Button>
@@ -36,13 +36,17 @@ export default class GaamitNavbar extends Component {
         <div className="container">
           <Navbar color="#fff" light toggleable>
             <NavbarToggler right onClick={this.toggle} />
+
             <NavbarBrand onClick={() => this.props.changePage('created')}>Gaamit</NavbarBrand>
+
             <Collapse isOpen={this.state.isOpen} navbar>
               <Nav className="ml-auto" navbar>
-                {this.props.userData ? null : login}
                 <NavItem>
-                  <NavLink onClick={() => this.props.changePage('login')}>Login</NavLink>
+                  <NavLink onClick={() => this.props.changePage('info')}>How it works</NavLink>
                 </NavItem>
+
+                {this.props.userData ? null : login}
+
                 <div className="hidden-sm-up">
                   <NavItem>
                     <NavLink onClick={() => this.props.changePage('editor')}>Write a Post</NavLink>

@@ -42,7 +42,7 @@ const call = (method, params, content, successCallback, errCallback, tries=0) =>
   content.headers['Authorization'] = localStorage.getItem('access_token');
 
   fetch(method(params), content)
-    //.then(oauth)
+    .then(oauth)
     .then((response) => response.json())
     .then((responseJson) => {
       successCallback(responseJson);
