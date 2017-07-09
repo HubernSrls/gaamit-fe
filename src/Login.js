@@ -56,7 +56,7 @@ export default class Login extends Component {
       Api.methods.login,
       params,
       (responseJson) => {
-        console.log(responseJson);
+
         let userData = {
           id: responseJson._id,
           username: responseJson.username,
@@ -78,16 +78,18 @@ export default class Login extends Component {
     steem.api.getAccounts(['mikepicker'], (err, result) => {
 
       let data = JSON.parse(result[0].json_metadata).profile;
-      console.log(data);
+
       this.setState({ loading: false });
       userData = {
         'image': data.profile_image,
         'location': data.location,
-        'website': data.website
+        'website': data.website,
+        'about': data.about
       };
 
       console.log(userData);
       this.props.setUserData(userData);
+      this.props.changePage('created');
 
     });
   }
@@ -128,8 +130,8 @@ export default class Login extends Component {
                   <button className="btn btn-lg btn-primary btn-block mt-3 gaamit-login-btn" type="submit">Sign up</button>
                   <a href="#" className="pull-right need-help mt-3">Forgot password? </a><span className="clearfix"></span>*/}
               </div>
+              {this.state.loading ? <Loading/> : null}
             </div>
-            {this.state.loading ? <Loading/> : null}
           </div>
     );
   }

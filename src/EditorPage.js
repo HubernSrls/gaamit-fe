@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Tooltip, Progress, Button } from 'reactstrap';
+import { Button } from 'reactstrap';
 import { MarkdownEditor } from 'react-markdown-editor';
 import { InputGroup, Input } from 'reactstrap';
 

@@ -12,7 +12,7 @@ export default class ProfilePage extends Component {
         <div id="profile-banner">
           <img id="profile-banner-img" src="https://static.pexels.com/photos/443356/pexels-photo-443356.jpeg" alt="profile banner"/>
           <div id="profile-headline">
-            <img id="profile-avatar" className="rounded-circle" src="http://teamzone-gaming.com/wp-content/uploads/2016/05/Durotan-Warcraft.0.0.jpg"/>
+            <img id="profile-avatar" className="rounded-circle" src={this.props.userData.image}/>
             <h1 id="profile-title">Mike <small>@mikepicker</small></h1>
           </div>
           <Button id="profile-follow-settings" outline color="primary" className="gaamit-button mr-1 mb-1" onClick={() => this.props.changePage('settings')}>Settings</Button>
@@ -23,7 +23,7 @@ export default class ProfilePage extends Component {
         <div className="row mt-3">
 
           <div className="col-md-4 mb-3">
-            <DescriptionCard/>
+            <DescriptionCard userData={this.props.userData}/>
           </div>
 
           <div className="col-md-4 p-0">

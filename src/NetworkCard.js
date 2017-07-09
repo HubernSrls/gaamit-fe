@@ -8,7 +8,7 @@ export default class NetworkCard extends Component {
       <div>
 
         <div className="card gaamit-card">
-          <h4 className="card-title mt-2">Follow more Devs</h4>
+          <h4 className="card-title mt-3">Follow more Devs</h4>
 
           <div className="gaamit-separator"/>
 

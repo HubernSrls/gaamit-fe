@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { InputGroup, InputGroupButton, Input, Button } from 'reactstrap';
+import { InputGroup, InputGroupButton, Input, Button, Alert } from 'reactstrap';
 import './UserSettings.css';
 import Api from './Api.js';
 
@@ -13,8 +13,10 @@ export default class ProfileCard extends Component {
       postingKey: '',
       loading: false,
       showPasswordMismatch: false,
-      profileUrl: 'http://teamzone-gaming.com/wp-content/uploads/2016/05/Durotan-Warcraft.0.0.jpg',
-      bannerUrl: 'https://static.pexels.com/photos/443356/pexels-photo-443356.jpeg'
+      profileUrl: props.userData.image,
+      bannerUrl: 'https://static.pexels.com/photos/443356/pexels-photo-443356.jpeg',
+      showError: false,
+      showSuccess: false
     };
   }
 
@@ -57,19 +59,44 @@ export default class ProfileCard extends Component {
       params,
       (responseJson) => {
 
-        this.setState({ loading: false });
+        this.setState({
+          loading: false,
+          showSuccess: true
+        });
+
         console.log(responseJson);
 
       },
       (error) => {
         this.setState({
           loading: false,
-          showPasswordMismatch: true
+          showError: true
         });
       });
   }
 
   render() {
+
+    let passwordMismatchAlert =
+      <div className="mt-3">
+        <Alert color="danger">
+          <strong>Ops!</strong> Password mismatch!.
+        </Alert>
+      </div>;
+
+    let errorAlert =
+      <div className="mt-3">
+        <Alert color="danger">
+          <strong>Ops!</strong> Something went wrong, please try again.
+        </Alert>
+      </div>;
+
+    let successAlert =
+      <div className="mt-3">
+        <Alert color="success">
+          <strong>Success!</strong> Your changes have been successfully applied.
+        </Alert>
+      </div>;
 
     return (
       <div className="card gaamit-card p-3">
@@ -122,6 +149,9 @@ export default class ProfileCard extends Component {
             <Input placeholder="posting key" onChange={this.handleChangeKey}/>
           </InputGroup>
         </div>
+
+        {this.state.showSuccess ? successAlert : null}
+        {this.state.showError ? errorAlert : null}
 
         <Button outline color="primary" className="gaamit-button mt-5" onClick={() => this.onClickSubmit()}>Submit</Button>
       </div>

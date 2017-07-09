@@ -10,6 +10,7 @@ import Info from './Info.js';
 import Login from './Login.js';
 import ProfileCard from './ProfileCard.js';
 import NetworkCard from './NetworkCard.js';
+import GaamitCard from './GaamitCard.js';
 import ProfilePage from './ProfilePage.js';
 import EditorPage from './EditorPage.js';
 import UserSettings from './UserSettings.js';
@@ -32,7 +33,7 @@ class App extends Component {
   }
 
   componentDidMount = () => {
-    this.changePage('login');
+    this.changePage('created');
 
     window.onscroll = (ev) => {
       if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
@@ -47,9 +48,10 @@ class App extends Component {
     // Feed categories
     if (newPage === 'created' || newPage === 'hot' || newPage === 'trending') {
       this.setState({
-        feed: null
-      });
-      this.fetchCategory(newPage);
+        feed: null,
+        lastPermlink: '',
+        lastAuthor: ''
+      }, () => this.fetchCategory(newPage));
     }
 
     // Show post content
@@ -71,7 +73,6 @@ class App extends Component {
     let currentFeed = this.state.feed;
     let limit = startPost ? 13 : 12;
 
-    console.log(startAuthor);
     let callback = (err, result) => {
 
       if (!result) {
@@ -85,10 +86,12 @@ class App extends Component {
         currentFeed = currentFeed.concat(result);
       }
 
+      let size = result.length < limit ? result.length : limit;
+
       this.setState({
         feed: currentFeed,
-        lastPermlink: result[11].permlink,
-        lastAuthor: result[11].author
+        lastPermlink: result[size-1].permlink,
+        lastAuthor: result[size-1].author
       });
     }
 
@@ -145,14 +148,15 @@ class App extends Component {
     let toggleJumbo = true;
     let toggleFooter = false;
 
-    let profileCard = <ProfileCard changePage={this.changePage}/>
+    let profileCard = <ProfileCard userData={this.state.userData} changePage={this.changePage}/>
     let networkCard = <NetworkCard/>
+    let gaamitCard = <GaamitCard changePage={this.changePage}/>
 
     if (this.state.page === 'created' || this.state.page === 'hot' || this.state.page === 'trending') {
       pageTag =
         <div className="row">
           <div className="hidden-xs-down col-md-3">
-            {this.props.userData ? profileCard : null}
+            {this.state.userData ? profileCard : gaamitCard}
           </div>
 
           <div className="col-md-6 p-0">
@@ -162,7 +166,7 @@ class App extends Component {
           </div>
 
           <div className="hidden-xs-down col-md-3">
-            {this.props.userData ? networkCard : null}
+            {networkCard}
           </div>
         </div>
 
@@ -180,14 +184,14 @@ class App extends Component {
                                body={postContentBody}/>
       }
     } else if (this.state.page === 'login') {
-      pageTag = <Login setUserData={this.setUserData}/>
+      pageTag = <Login changePage={this.changePage} setUserData={this.setUserData}/>
       toggleJumbo = false;
     } else if (this.state.page === 'profile') {
-      pageTag = <ProfilePage userData={this.props.userData} changePage={this.changePage}/>
+      pageTag = <ProfilePage userData={this.state.userData} changePage={this.changePage}/>
     } else if (this.state.page === 'editor') {
-      pageTag = <EditorPage/>
+      pageTag = <EditorPage userData={this.state.userData}/>
     } else if (this.state.page === 'settings') {
-      pageTag = <UserSettings/>
+      pageTag = <UserSettings userData={this.state.userData}/>
     }
 
     return (

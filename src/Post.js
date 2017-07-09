@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './Post.css';
+import placeholder from './assets/gaamit_placeholder.png';
 
 export default class Post extends Component {
 
@@ -10,8 +11,8 @@ export default class Post extends Component {
   render() {
 
     //let image = this.props.body.match(/(https?:\/\/.*\.(?:png|jpg|gif))/i);
-    let image = this.props.image;
-    let imageTag = image ? <img className="card-img-top img-fluid gaamit-post-image" src={image[0]} alt=""/> : null;
+    let image = this.props.image ? this.props.image[0] : placeholder;
+    let imageTag = <img className="card-img-top img-fluid gaamit-post-image" src={image} alt=""/>;
     let authorTag = <a href={"https://steemit.com/@" + this.props.author}>{this.props.author}</a>
 
     // Date
