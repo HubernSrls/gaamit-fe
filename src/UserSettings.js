@@ -11,6 +11,7 @@ export default class ProfileCard extends Component {
       password: '',
       confirmPassword: '',
       postingKey: '',
+      steemitUsername: '',
       loading: false,
       showPasswordMismatch: false,
       profileUrl: props.userData.image,
@@ -44,6 +45,10 @@ export default class ProfileCard extends Component {
       });
     }
 
+  }
+
+  handleChangeUsername = (e) => {
+    this.setState({ steemitUsername: e.target.value });
   }
 
   onClickSubmit = () => {
@@ -101,7 +106,9 @@ export default class ProfileCard extends Component {
     return (
       <div className="card gaamit-card p-3">
 
-        <label htmlFor="settings-profile-img">Change Profile Picture</label>
+        <h1 className="card-title">User Settings</h1>
+
+        {/*<label htmlFor="settings-profile-img">Change Profile Picture</label>
         <img id="settings-profile-img" className="rounded-circle" src={this.state.profileUrl} alt="profile pic"/>
 
         <div id="input-profile-pic" className="mt-3 mb-3">
@@ -110,7 +117,7 @@ export default class ProfileCard extends Component {
             <Input placeholder="http//..." onChange={this.handleChangeProfile}/>
           </InputGroup>
 
-        </div>
+        </div>*/}
 
         <div className="mt-3 mb-3"/>
 
@@ -138,6 +145,15 @@ export default class ProfileCard extends Component {
 
           <InputGroup>
             <Input placeholder="confirm password"/>
+          </InputGroup>
+        </div>
+
+        <div className="mt-3 mb-3"/>
+
+        <label htmlFor="input-posting-key">Steemit Username</label>
+        <div id="input-steemit-username">
+          <InputGroup>
+            <Input placeholder="username" onChange={this.handleChangeUsername}/>
           </InputGroup>
         </div>
 

@@ -76,7 +76,7 @@ export default class Login extends Component {
 
   fetchSteemitData = (userData) => {
     steem.api.getAccounts(['mikepicker'], (err, result) => {
-
+      console.log(result);
       let data = JSON.parse(result[0].json_metadata).profile;
 
       this.setState({ loading: false });
@@ -84,7 +84,8 @@ export default class Login extends Component {
         'image': data.profile_image,
         'location': data.location,
         'website': data.website,
-        'about': data.about
+        'about': data.about,
+        'votingPower': result[0].voting_power
       };
 
       console.log(userData);

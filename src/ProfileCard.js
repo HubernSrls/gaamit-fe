@@ -19,6 +19,8 @@ export default class ProfileCard extends Component {
 
   render() {
 
+    let votingPower = this.props.userData.votingPower/100;
+
     return (
       <div className="card gaamit-card">
         <img className="rounded-circle img-circle mt-3 mb-3" src={this.props.userData.image} alt=""/>
@@ -27,10 +29,10 @@ export default class ProfileCard extends Component {
           <h4 className="card-title">Michele</h4>
           <p className="card-text" style={{ color: '#888' }}>@mikepicker</p>
           <div id="gaamit-voting-power">
-            <Progress className="gaamit-progress" bar color="success" value="80"/>
+            <Progress className="gaamit-progress" bar color="success" value={votingPower}/>
           </div>
-          <Tooltip placement="left" isOpen={this.state.tooltipOpen} target="gaamit-voting-power" toggle={this.toggle}>
-            Voting Power
+          <Tooltip placement="right" isOpen={this.state.tooltipOpen} target="gaamit-voting-power" toggle={this.toggle}>
+            Voting Power {votingPower + '%'}
           </Tooltip>
           <Button className="gaamit-button mt-3" onClick={() => this.props.changePage('profile')}>Your Page</Button>
         </div>
