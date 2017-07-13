@@ -177,11 +177,10 @@ class App extends Component {
     } else if (this.state.page === 'post') {
       let postContentBody = this.state.feed ? this.state.feed[this.state.postContent] : '';
       if (postContentBody) {
-        postContentBody = postContentBody.body;
         pageTag = <PostContent show={this.state.showPostContent}
                                title={this.state.feed[this.state.postContent].title}
                                author={this.state.feed[this.state.postContent].author}
-                               body={postContentBody}/>
+                               content={postContentBody}/>
       }
     } else if (this.state.page === 'login') {
       pageTag = <Login changePage={this.changePage} setUserData={this.setUserData}/>

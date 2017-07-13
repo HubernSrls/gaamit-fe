@@ -79,3 +79,17 @@
   font-size: 18px !important;
   cursor: pointer;
 }
+
+.gaamit-upvote {
+  float: left;
+  color: #aaa;
+  cursor: pointer;
+}
+
+.gaamit-upvote.active {
+  color: #66b8f4;
+}
+
+.gaamit-post-reward {
+  float: left;
+}
