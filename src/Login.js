@@ -48,7 +48,7 @@ export default class Login extends Component {
     this.setState({ loading: true });
 
     let params = {
-      username: this.state.email,
+      email: this.state.email,
       password: this.state.password
     }
 
@@ -59,7 +59,7 @@ export default class Login extends Component {
 
         let userData = {
           id: responseJson._id,
-          username: responseJson.username,
+          email: responseJson.email,
           postingKey: responseJson.postingKey
         };
 

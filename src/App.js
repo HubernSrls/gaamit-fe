@@ -33,7 +33,14 @@ class App extends Component {
   }
 
   componentDidMount = () => {
-    this.changePage('created');
+
+    // Retrieve stored data
+    if (localStorage.user_data) {
+      console.log(localStorage.user_data);
+      this.setState({ userData: JSON.parse(localStorage.user_data) })
+    }
+
+    this.changePage('created', null, false);
 
     window.onscroll = (ev) => {
       if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
@@ -41,9 +48,24 @@ class App extends Component {
       }
     };
 
+    // History API
+    window.onpopstate = (e) => {
+      console.log(e.state);
+      if (e.state === null) {
+        this.changePage('created', null, false);
+      }
+      else {
+        this.changePage(e.state.page, e.state.params, false);
+      }
+    };
+
   }
 
-  changePage= (newPage, params) => {
+  changePage = (newPage, params, pushToHistory=true) => {
+
+    if (pushToHistory) {
+      window.history.pushState({ page: newPage, params: params }, null);
+    }
 
     // Feed categories
     if (newPage === 'created' || newPage === 'hot' || newPage === 'trending') {
@@ -136,6 +158,7 @@ class App extends Component {
   }
 
   setUserData = (data) => {
+    localStorage.setItem('user_data', JSON.stringify(data));
     this.setState({
       userData: data
     });
@@ -180,7 +203,8 @@ class App extends Component {
         pageTag = <PostContent show={this.state.showPostContent}
                                title={this.state.feed[this.state.postContent].title}
                                author={this.state.feed[this.state.postContent].author}
-                               content={postContentBody}/>
+                               content={postContentBody}
+                               userData={this.state.userData}/>
       }
     } else if (this.state.page === 'login') {
       pageTag = <Login changePage={this.changePage} setUserData={this.setUserData}/>

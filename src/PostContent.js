@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import showdown from 'showdown';
-//import steem from 'steem';
+import steem from 'steem';
 import Comment from './Comment.js';
 import './PostContent.css';
 
@@ -9,7 +9,8 @@ export default class PostContent extends Component {
     super(props);
 
     this.state = {
-      replies: null
+      replies: null,
+      upvoted: false
     };
 
   }
@@ -20,6 +21,21 @@ export default class PostContent extends Component {
     /*steem.api.getContent(this.props.content.author, this.props.content.permlink, (err, result) => {
       console.log(err, result);
     });*/
+
+    // Check if if already voted
+    if (this.props.userData) {
+      let votes = this.props.content.active_votes;
+      for (let i in votes) {
+        if (votes[i].voter === this.props.userData.username) {
+          this.setState({upvoted: true});
+        }
+      }
+    }
+
+  }
+
+  upvote = () => {
+
   }
 
   render() {
@@ -42,6 +58,10 @@ export default class PostContent extends Component {
     } while (match);*/
 
     let reward = this.props.content.pending_payout_value.substring(0, this.props.content.pending_payout_value.length-4);
+    let upvoteStyle = "fa fa-chevron-up gaamit-upvote";
+    if (this.state.upvoted) {
+      upvoteStyle += " active";
+    }
 
     return (
       <div className="container col-md-12">
@@ -52,7 +72,7 @@ export default class PostContent extends Component {
         <div className="card mb-3 gaamit-card pt-5">
           <div className="pl-5 pr-5" dangerouslySetInnerHTML={{ __html: body}} style={{ textAlign: 'left' }}/>
           <div className="card-footer">
-            <i className="fa fa-chevron-up gaamit-upvote active"/>
+            <i className={upvoteStyle}/>
             <p className="gaamit-post-reward ml-2 mb-0">$ {reward}</p>
           </div>
         </div>
