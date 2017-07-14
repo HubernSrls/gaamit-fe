@@ -28,13 +28,16 @@ export default class ProfileCard extends Component {
         <div className="card-block">
           <h4 className="card-title">Michele</h4>
           <p className="card-text" style={{ color: '#888' }}>@mikepicker</p>
+
           <div id="gaamit-voting-power">
             <Progress className="gaamit-progress" bar color="success" value={votingPower}/>
           </div>
+          <p>{votingPower + '%'}</p>
+
           <Tooltip placement="right" isOpen={this.state.tooltipOpen} target="gaamit-voting-power" toggle={this.toggle}>
             Voting Power {votingPower + '%'}
           </Tooltip>
-          <Button className="gaamit-button mt-3" onClick={() => this.props.changePage('profile')}>Your Page</Button>
+          <Button className="gaamit-button mt-3" onClick={() => this.props.changePage('blog')}>Your Page</Button>
         </div>
       </div>
     );

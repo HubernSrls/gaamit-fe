@@ -1,9 +1,5 @@
 import React, { Component } from 'react';
-import { Button } from 'reactstrap';
-import Header from './Header.js';
 import GaamitNavbar from './GaamitNavbar.js';
-import Jumbotron from './Jumbotron.js';
-import Sidebar from './Sidebar.js';
 import Posts from './Posts.js'
 import PostContent from './PostContent.js'
 import Info from './Info.js';
@@ -39,7 +35,7 @@ class App extends Component {
       this.setState({ userData: JSON.parse(localStorage.user_data) })
     }
 
-    this.changePage('created', null, false);
+    this.changePage('feed', null, false);
 
     window.onscroll = (ev) => {
       if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
@@ -67,7 +63,7 @@ class App extends Component {
     }
 
     // Feed categories
-    if (newPage === 'created' || newPage === 'hot' || newPage === 'trending') {
+    if (newPage === 'created' || newPage === 'hot' || newPage === 'trending' || newPage === 'feed' || newPage === 'blog') {
       this.setState({
         feed: null,
         lastPermlink: '',
@@ -119,9 +115,9 @@ class App extends Component {
     switch (category) {
 
       case 'feed':
-        steem.api.getDiscussionsByCreated({
+        steem.api.getDiscussionsByFeed({
           limit: limit,
-          user: 'mikepicker',
+          tag: 'mikepicker',
           start_author: startAuthor,
           start_permlink: startPost
         }, callback);
@@ -153,6 +149,15 @@ class App extends Component {
           start_permlink: startPost
         }, callback);
         break;
+
+      case 'blog':
+        steem.api.getDiscussionsByBlog({
+          limit: limit,
+          tag: 'mikepicker',
+          start_author: startAuthor,
+          start_permlink: startPost
+        }, callback);
+        break;
     }
 
     /*fetch(`https://api.steemjs.com/getState?path=/${category}/gamedev`).then((response) => {
@@ -176,7 +181,7 @@ class App extends Component {
 
     // Current page
     let pageTag;
-    let toggleJumbo = true;
+    //let toggleJumbo = true;
     let toggleFooter = false;
 
     let profileCard = <ProfileCard userData={this.state.userData} changePage={this.changePage}/>
@@ -193,7 +198,8 @@ class App extends Component {
           <div className="col-md-6 p-0">
             <Posts page={this.state.page}
                    changePage={this.changePage}
-                   feed={this.state.feed}/>
+                   feed={this.state.feed}
+                   userData={this.state.userData}/>
           </div>
 
           <div className="hidden-xs-down col-md-3">
@@ -216,9 +222,9 @@ class App extends Component {
       }
     } else if (this.state.page === 'login') {
       pageTag = <Login changePage={this.changePage} setUserData={this.setUserData}/>
-      toggleJumbo = false;
-    } else if (this.state.page === 'profile') {
-      pageTag = <ProfilePage userData={this.state.userData} changePage={this.changePage}/>
+      //toggleJumbo = false;
+    } else if (this.state.page === 'blog') {
+      pageTag = <ProfilePage userData={this.state.userData} changePage={this.changePage} fetchCategory={this.fetchCategory} feed={this.state.feed}/>
     } else if (this.state.page === 'editor') {
       pageTag = <EditorPage userData={this.state.userData}/>
     } else if (this.state.page === 'settings') {
