@@ -3,10 +3,34 @@ import { Button } from 'reactstrap';
 import DescriptionCard from './DescriptionCard.js';
 import NetworkCard from './NetworkCard.js';
 import Post from './Post.js';
+import Loading from './Loading.js';
 import './ProfilePage.css';
 
 export default class ProfilePage extends Component {
   render() {
+
+    let posts = [];
+    let key = 0;
+    for (let content in this.props.feed) {
+      let data = this.props.feed[content];
+
+      posts.push(
+        <div key={key++} className="p-0">
+          <Post id={content}
+                title={data.title}
+                author={data.author}
+                lastUpdate={data.last_update}
+                image={JSON.parse(data.json_metadata).image}
+                body={data.body}
+                changePage={this.props.changePage}/>
+        </div>);
+    }
+
+    // Loading
+    if (!this.props.feed) {
+      posts = <Loading/>
+    }
+
     return (
       <div>
         <div id="profile-banner">
@@ -27,32 +51,7 @@ export default class ProfilePage extends Component {
           </div>
 
           <div className="col-md-4 p-0">
-            <Post key={0}
-                  id={1}
-                  title={'My new game is online!'}
-                  author={'Mike'}
-                  lastUpdate={'now'}
-                  image={['https://static.pexels.com/photos/18174/reflection-pad-gaming-gamepad.jpg']}
-                  body={'<p>Hello</p>'}
-                  changePage={this.props.changePage}/>
-
-            <Post key={1}
-                  id={1}
-                  title={'Development Blog - #1'}
-                  author={'Mike'}
-                  lastUpdate={'now'}
-                  image={['https://static.pexels.com/photos/163036/mario-luigi-yoschi-figures-163036.jpeg']}
-                  body={'<p>Hello</p>'}
-                  changePage={this.props.changePage}/>
-
-            <Post key={2}
-                  id={1}
-                  title={'Title'}
-                  author={'Mike'}
-                  lastUpdate={'now'}
-                  image={['https://static.pexels.com/photos/443356/pexels-photo-443356.jpeg']}
-                  body={'<p>Hello</p>'}
-                  changePage={this.props.changePage}/>
+            {posts}
           </div>
 
           <div className="col-md-4">

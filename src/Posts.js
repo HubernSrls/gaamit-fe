@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import Post from './Post.js'
 import Loading from './Loading.js';
-import { chunk, values } from 'lodash';
 import './Posts.css';
 
 export default class Posts extends Component {
@@ -23,7 +22,7 @@ export default class Posts extends Component {
         <ul className="nav nav-pills justify-content-center">
           {this.props.userData ?
             <li className="nav-item">
-              <div className={'nav-link ' + (this.props.page === 'home' ? 'active' : null)} onClick={(e) => this.onClickTab(e, 'created')}>Home</div>
+              <div className={'nav-link ' + (this.props.page === 'feed' ? 'active' : null)} onClick={(e) => this.onClickTab(e, 'feed')}>Home</div>
             </li> : null}
           <li className="nav-item">
             <div className={'nav-link ' + (this.props.page === 'created' ? 'active' : null)} onClick={(e) => this.onClickTab(e, 'created')}>New</div>

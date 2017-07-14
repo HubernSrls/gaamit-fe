@@ -26,7 +26,7 @@ export default class GaamitNavbar extends Component {
       </NavItem>
 
     let profile =
-      <img className="rounded-circle img-circle-nav hidden-xs-down ml-3" src={this.props.userData ? this.props.userData.image : ''} alt="" onClick={() => this.props.changePage('profile')}/>
+      <img className="rounded-circle img-circle-nav hidden-xs-down ml-3" src={this.props.userData ? this.props.userData.image : ''} alt="" onClick={() => this.props.changePage('blog')}/>
 
     let newPost =
       <Button outline id="gaamit-btn-post" color="primary" className="ml-3 pt-2 pb-2 hidden-xs-down" onClick={() => this.props.changePage('editor')}>New Post</Button>
@@ -52,7 +52,7 @@ export default class GaamitNavbar extends Component {
                     <NavLink onClick={() => this.props.changePage('editor')}>Write a Post</NavLink>
                   </NavItem>
                   <NavItem>
-                    <NavLink onClick={() => this.props.changePage('profile')}>Profile</NavLink>
+                    <NavLink onClick={() => this.props.changePage('blog')}>Profile</NavLink>
                   </NavItem>
                 </div>
               </Nav>
