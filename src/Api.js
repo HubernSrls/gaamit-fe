@@ -146,6 +146,10 @@ module.exports = {
 
     settings: (params) => {
       return `${baseURL}/users/${params.id}`;
-    }
+    },
+
+    upvote: (params) => {
+      return `${baseURL}/upvote/${params.username}`;
+    },
   }
 }

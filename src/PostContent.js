@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import showdown from 'showdown';
 import steem from 'steem';
 import Comment from './Comment.js';
+import Api from './Api.js';
 import './PostContent.css';
+import loading from './loading.svg';
 
 export default class PostContent extends Component {
   constructor(props) {
@@ -10,7 +12,8 @@ export default class PostContent extends Component {
 
     this.state = {
       replies: null,
-      upvoted: false
+      upvoted: false,
+      loading: false
     };
 
   }
@@ -26,7 +29,7 @@ export default class PostContent extends Component {
     if (this.props.userData) {
       let votes = this.props.content.active_votes;
       for (let i in votes) {
-        if (votes[i].voter === this.props.userData.username) {
+        if (votes[i].voter === "mikepicker") {
           this.setState({upvoted: true});
         }
       }
@@ -36,10 +39,36 @@ export default class PostContent extends Component {
 
   upvote = () => {
 
+    this.setState({ loading: true });
+
+    let params = {
+      username: "mikepicker",
+      author: this.props.content.author,
+      permlink: this.props.content.permlink
+    }
+
+    Api.post(
+      Api.methods.upvote,
+      params,
+      (responseJson) => {
+
+        this.setState({
+          loading: false,
+          upvoted: true
+        });
+
+        console.log(responseJson);
+
+      },
+      (error) => {
+        console.log(error);
+        this.setState({
+          loading: false
+        });
+      });
   }
 
   render() {
-    console.log(this.props.content.body);
 
     let converter = new showdown.Converter();
     let text = this.props.content.body;
@@ -72,7 +101,7 @@ export default class PostContent extends Component {
         <div className="card mb-3 gaamit-card pt-5">
           <div className="pl-5 pr-5" dangerouslySetInnerHTML={{ __html: body}} style={{ textAlign: 'left' }}/>
           <div className="card-footer">
-            <i className={upvoteStyle}/>
+            {this.state.loading ? <img className="gaamit-upvote-loading" src={loading} alt="loading" /> : <i className={upvoteStyle} onClick={() => this.upvote()}/>}
             <p className="gaamit-post-reward ml-2 mb-0">$ {reward}</p>
           </div>
         </div>

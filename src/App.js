@@ -36,7 +36,6 @@ class App extends Component {
 
     // Retrieve stored data
     if (localStorage.user_data) {
-      console.log(localStorage.user_data);
       this.setState({ userData: JSON.parse(localStorage.user_data) })
     }
 
@@ -119,6 +118,15 @@ class App extends Component {
 
     switch (category) {
 
+      case 'feed':
+        steem.api.getDiscussionsByCreated({
+          limit: limit,
+          user: 'mikepicker',
+          start_author: startAuthor,
+          start_permlink: startPost
+        }, callback);
+        break;
+
       case 'created':
         steem.api.getDiscussionsByCreated({
           limit: limit,
@@ -175,7 +183,7 @@ class App extends Component {
     let networkCard = <NetworkCard/>
     let gaamitCard = <GaamitCard changePage={this.changePage}/>
 
-    if (this.state.page === 'created' || this.state.page === 'hot' || this.state.page === 'trending') {
+    if (this.state.page === 'created' || this.state.page === 'hot' || this.state.page === 'trending' || this.state.page === 'feed') {
       pageTag =
         <div className="row">
           <div className="hidden-xs-down col-md-3">

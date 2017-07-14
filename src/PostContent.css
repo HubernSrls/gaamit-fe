@@ -1,0 +1,11 @@
+.gaamit-upvote-loading {
+  width: 16px;
+  height: 16px;
+  animation: loading-spin infinite 1s linear;
+  float: left;
+}
+
+@keyframes loading-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
