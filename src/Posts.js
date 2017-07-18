@@ -10,7 +10,6 @@ export default class Posts extends Component {
       return;
     }
 
-    console.log(e.type);
     e.preventDefault();
     e.stopPropagation();
     this.props.changePage(page);
@@ -20,7 +19,7 @@ export default class Posts extends Component {
     return (
       <div className="card gaamit-card pt-2 pb-2 mb-3">
         <ul className="nav nav-pills justify-content-center">
-          {this.props.userData ?
+          {this.props.userData && this.props.userData.steemitUsername ?
             <li className="nav-item">
               <div className={'nav-link ' + (this.props.page === 'feed' ? 'active' : null)} onClick={(e) => this.onClickTab(e, 'feed')}>Home</div>
             </li> : null}
@@ -54,6 +53,7 @@ export default class Posts extends Component {
                   author={data.author}
                   lastUpdate={data.last_update}
                   image={JSON.parse(data.json_metadata).image}
+                  reward={data.pending_payout_value}
                   body={data.body}
                   changePage={this.props.changePage}/>
           </div>);

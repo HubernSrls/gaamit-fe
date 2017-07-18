@@ -7,10 +7,12 @@ import Login from './Login.js';
 import ProfileCard from './ProfileCard.js';
 import NetworkCard from './NetworkCard.js';
 import GaamitCard from './GaamitCard.js';
+import SetUsernameCard from './SetUsernameCard.js';
 import ProfilePage from './ProfilePage.js';
 import EditorPage from './EditorPage.js';
 import UserSettings from './UserSettings.js';
 import Footer from './Footer.js';
+import Api from './Api.js';
 import steem from 'steem';
 import './App.css';
 
@@ -20,11 +22,13 @@ class App extends Component {
 
     this.state = {
       page: '',
+      pageParams: null,
       feed: null,
       postContent: '',
       userData: null,
       lastPermlink: '',
-      lastAuthor: ''
+      lastAuthor: '',
+      hideMascotte: false
     }
   }
 
@@ -35,12 +39,14 @@ class App extends Component {
       this.setState({ userData: JSON.parse(localStorage.user_data) })
     }
 
-    this.changePage('feed', null, false);
+    this.changePage('created', null, false);
 
     window.onscroll = (ev) => {
       if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
-          this.fetchCategory(this.state.page, this.state.lastPermlink, this.state.lastAuthor);
+        this.fetchCategory(this.state.page, this.state.lastPermlink, this.state.lastAuthor);
       }
+
+      this.setState({hideMascotte: window.scrollY > 0});
     };
 
     // History API
@@ -79,11 +85,17 @@ class App extends Component {
     }
 
     this.setState({
-      page: newPage
+      page: newPage,
+      pageParams: params
     });
 
   }
 
+  logout = () => {
+    delete localStorage.user_data;
+    this.setState({userData: null});
+    this.changePage('created');
+  }
 
   fetchCategory = (category, startPost, startAuthor) => {
 
@@ -112,12 +124,14 @@ class App extends Component {
       });
     }
 
+    let blogTag = this.state.pageParams && this.state.pageParams.username ? this.state.pageParams.username : this.state.userData.steemitUsername;
+
     switch (category) {
 
       case 'feed':
         steem.api.getDiscussionsByFeed({
           limit: limit,
-          tag: 'mikepicker',
+          tag: this.state.userData.steemitUsername,
           start_author: startAuthor,
           start_permlink: startPost
         }, callback);
@@ -153,10 +167,13 @@ class App extends Component {
       case 'blog':
         steem.api.getDiscussionsByBlog({
           limit: limit,
-          tag: 'mikepicker',
+          tag: blogTag,
           start_author: startAuthor,
           start_permlink: startPost
         }, callback);
+        break;
+
+      default:
         break;
     }
 
@@ -171,10 +188,47 @@ class App extends Component {
   }
 
   setUserData = (data) => {
+    console.log(data);
     localStorage.setItem('user_data', JSON.stringify(data));
     this.setState({
       userData: data
     });
+  }
+
+  setSteemitData = (data) => {console.log(data);
+    let userData = this.state.userData;
+    userData = {
+      id: userData.id,
+      steemitUsername: data.steemitUsername,
+      name: data.name,
+      image: data.image,
+      location: data.location,
+      website: data.website,
+      about: data.about,
+      votingPower: data.votingPower
+    };
+
+    localStorage.setItem('user_data', JSON.stringify(userData));
+    this.setState({
+      userData: userData
+    });
+  }
+
+  followUser = (id) => {
+    let params = {
+      follower: this.state.userData.id,
+      followed: id,
+    }
+
+    Api.get(
+      Api.methods.follow,
+      params,
+      (responseJson) => {
+        console.log(responseJson);
+      },
+      (error) => {
+        console.log(error);
+      });
   }
 
   render() {
@@ -184,15 +238,27 @@ class App extends Component {
     //let toggleJumbo = true;
     let toggleFooter = false;
 
-    let profileCard = <ProfileCard userData={this.state.userData} changePage={this.changePage}/>
-    let networkCard = <NetworkCard/>
-    let gaamitCard = <GaamitCard changePage={this.changePage}/>
+    const profileCard = <ProfileCard userData={this.state.userData} changePage={this.changePage}/>
+    const networkCard = <NetworkCard userData={this.state.userData} changePage={this.changePage} followUser={this.followUser}/>
+    const gaamitCard = <GaamitCard changePage={this.changePage}/>
+    const setUsernameCard = <SetUsernameCard changePage={this.changePage}/>
+
+    let leftComponent;
+    if (this.state.userData) {
+      if (this.state.userData.steemitUsername) {
+        leftComponent = profileCard;
+      } else {
+        leftComponent = setUsernameCard;
+      }
+    } else {
+      leftComponent = gaamitCard;
+    }
 
     if (this.state.page === 'created' || this.state.page === 'hot' || this.state.page === 'trending' || this.state.page === 'feed') {
       pageTag =
         <div className="row">
           <div className="hidden-xs-down col-md-3">
-            {this.state.userData ? profileCard : gaamitCard}
+            {leftComponent}
           </div>
 
           <div className="col-md-6 p-0">
@@ -224,16 +290,25 @@ class App extends Component {
       pageTag = <Login changePage={this.changePage} setUserData={this.setUserData}/>
       //toggleJumbo = false;
     } else if (this.state.page === 'blog') {
-      pageTag = <ProfilePage userData={this.state.userData} changePage={this.changePage} fetchCategory={this.fetchCategory} feed={this.state.feed}/>
+      pageTag = <ProfilePage userData={this.state.userData}
+                             changePage={this.changePage}
+                             fetchCategory={this.fetchCategory}
+                             feed={this.state.feed}
+                             pageParams={this.state.pageParams}
+                             followUser={this.followUser}/>
     } else if (this.state.page === 'editor') {
       pageTag = <EditorPage userData={this.state.userData}/>
     } else if (this.state.page === 'settings') {
-      pageTag = <UserSettings userData={this.state.userData}/>
+      pageTag = <UserSettings userData={this.state.userData} setSteemitData={this.setSteemitData}/>
     }
 
     return (
       <div className="App">
-        <GaamitNavbar page={this.state.page} changePage={this.changePage} userData={this.state.userData}/>
+        <GaamitNavbar page={this.state.page}
+                      changePage={this.changePage}
+                      userData={this.state.userData}
+                      hideMascotte={this.state.hideMascotte}
+                      logout={this.logout}/>
         <div className="container mb-5 mt-4">
           {pageTag}
         </div>

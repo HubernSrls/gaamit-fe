@@ -1,0 +1,11 @@
+.gaamit-post-loading {
+  width: 32px;
+  height: 32px;
+  animation: loading-spin infinite 1s linear;
+  float: left;
+}
+
+@keyframes loading-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}

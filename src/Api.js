@@ -135,8 +135,12 @@ module.exports = {
   methods: {
 
     // GET
-    userData: (params) => {
-      return `${baseURL}/api/${params.lang}/user/id/${params.userID}`;
+    suggested: (params) => {
+      return `${baseURL}/users/${params.id}/suggested`;
+    },
+
+    follow: (params) => {
+      return `${baseURL}/users/${params.follower}/follow/${params.followed}`;
     },
 
     // POST
@@ -151,5 +155,9 @@ module.exports = {
     upvote: (params) => {
       return `${baseURL}/upvote/${params.username}`;
     },
+
+    post: (params) => {
+      return `${baseURL}/post/${params.username}`;
+    }
   }
 }
