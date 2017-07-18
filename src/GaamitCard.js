@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Button } from 'reactstrap';
 import image from './assets/gaamit_placeholder.png';
 
 export default class GaamitCard extends Component {

@@ -40,8 +40,8 @@
   top:0;
   bottom:0;
   margin: auto;
-  width: 32px;
-  height: 32px;
+  width: 32px !important;
+  height: 32px !important;
   object-fit: cover;
   cursor: pointer;
 }
@@ -80,6 +80,10 @@
   cursor: pointer;
 }
 
+.gaamit-button-outline:hover {
+  background-color: #fff !important;
+}
+
 .gaamit-upvote {
   float: left;
   color: #aaa;
@@ -92,4 +96,14 @@
 
 .gaamit-post-reward {
   float: left;
+}
+
+.gaamit-user-link {
+  color: #4ba2f2;
+  text-decoration: underline;
+}
+
+.gaamit-user-link:hover {
+  color: #014c8c;
+  text-decoration: underline;
 }

@@ -12,6 +12,7 @@ export default class GaamitNavbar extends Component {
       isOpen: false
     };
   }
+
   toggle() {
     this.setState({
       isOpen: !this.state.isOpen
@@ -25,8 +26,13 @@ export default class GaamitNavbar extends Component {
         <NavLink onClick={() => this.props.changePage('login')}>Login</NavLink>
       </NavItem>
 
+    let logout =
+      <NavItem>
+        <NavLink onClick={() => this.props.logout()}>Logout</NavLink>
+      </NavItem>
+
     let profile =
-      <img className="rounded-circle img-circle-nav hidden-xs-down ml-3" src={this.props.userData ? this.props.userData.image : ''} alt="" onClick={() => this.props.changePage('blog')}/>
+      <img className="rounded-circle img-circle-nav hidden-xs-down ml-3" src={this.props.userData ? this.props.userData.image : ''} alt="" onClick={() => this.props.changePage('blog', {username: this.props.userData.steemitUsername})}/>
 
     let newPost =
       <Button outline id="gaamit-btn-post" color="primary" className="ml-3 pt-2 pb-2 hidden-xs-down" onClick={() => this.props.changePage('editor')}>New Post</Button>
@@ -45,7 +51,7 @@ export default class GaamitNavbar extends Component {
                   <NavLink onClick={() => this.props.changePage('info')}>How it works</NavLink>
                 </NavItem>
 
-                {this.props.userData ? null : login}
+                {this.props.userData ? logout : login}
 
                 <div className="hidden-sm-up">
                   <NavItem>
@@ -69,7 +75,7 @@ export default class GaamitNavbar extends Component {
 
           </Navbar>
         </div>
-        <img src={logo} id="gaamit-navbar-logo" alt="logo"/>
+        {this.props.hideMascotte ? null : <img src={logo} id="gaamit-navbar-logo" alt="logo"/>}
       </div>
     );
   }

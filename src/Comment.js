@@ -12,7 +12,7 @@ export default class Comment extends Component {
           </div>
 
           <div className="pl-3 gaamit-comment-content">
-            <p className="m-0"><strong>mikepicker</strong></p>
+            <p className="m-0"><strong>{this.props.userData.steemitUsername}</strong></p>
             <p className="m-0">Test</p>
           </div>
         </div>

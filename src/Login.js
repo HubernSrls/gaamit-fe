@@ -59,8 +59,7 @@ export default class Login extends Component {
 
         let userData = {
           id: responseJson._id,
-          email: responseJson.email,
-          postingKey: responseJson.postingKey
+          email: responseJson.email
         };
 
         this.fetchSteemitData(userData);
@@ -75,24 +74,33 @@ export default class Login extends Component {
   }
 
   fetchSteemitData = (userData) => {
-    steem.api.getAccounts(['mikepicker'], (err, result) => {
-      console.log(result);
-      let data = JSON.parse(result[0].json_metadata).profile;
 
-      this.setState({ loading: false });
-      userData = {
-        'image': data.profile_image,
-        'location': data.location,
-        'website': data.website,
-        'about': data.about,
-        'votingPower': result[0].voting_power
-      };
+    if (userData.steemitUsername) {
+      steem.api.getAccounts([userData.steemitUsername], (err, result) => {
 
-      console.log(userData);
+        if (result[0].json_metadata !== '') {
+          let data = JSON.parse(result[0].json_metadata).profile;
+
+          userData = {
+            id: userData.id,
+            steemitUsername: userData.steemitUsername,
+            name: data.name,
+            image: data.profile_image,
+            location: data.location,
+            website: data.website,
+            about: data.about,
+            votingPower: result[0].voting_power
+          };
+        }
+
+        this.props.setUserData(userData);
+        this.props.changePage('created');
+
+      });
+    } else {
       this.props.setUserData(userData);
       this.props.changePage('created');
-
-    });
+    }
   }
 
   render() {

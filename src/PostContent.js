@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import showdown from 'showdown';
-import steem from 'steem';
-import Comment from './Comment.js';
+//import steem from 'steem';
+//import Comment from './Comment.js';
 import Api from './Api.js';
 import './PostContent.css';
 import loading from './loading.svg';
@@ -29,7 +29,7 @@ export default class PostContent extends Component {
     if (this.props.userData) {
       let votes = this.props.content.active_votes;
       for (let i in votes) {
-        if (votes[i].voter === "mikepicker") {
+        if (votes[i].voter === this.props.userData.steemitUsername) {
           this.setState({upvoted: true});
         }
       }
@@ -42,7 +42,7 @@ export default class PostContent extends Component {
     this.setState({ loading: true });
 
     let params = {
-      username: "mikepicker",
+      username: this.props.userData.steemitUsername,
       author: this.props.content.author,
       permlink: this.props.content.permlink
     }
@@ -71,7 +71,7 @@ export default class PostContent extends Component {
   render() {
 
     let converter = new showdown.Converter();
-    let text = this.props.content.body;
+    //let text = this.props.content.body;
     let body = converter.makeHtml(this.props.content.body);
     body = body.replace(/<img/gi, '<br/><img class="img-fluid"');
 
@@ -96,7 +96,7 @@ export default class PostContent extends Component {
       <div className="container col-md-12">
         <div className="card mb-3 pt-3 gaamit-card">
           <h4 className="card-title">{this.props.content.title}</h4>
-          <p className="card-title">By <a href={"https://steemit.com/@" + this.props.content.author}>{this.props.content.author}</a></p>
+          <p className="card-title">By <a href="" onClick={() => this.props.changePage('profile', {username: this.props.content.author})}>{this.props.content.author}</a></p>
         </div>
         <div className="card mb-3 gaamit-card pt-5">
           <div className="pl-5 pr-5" dangerouslySetInnerHTML={{ __html: body}} style={{ textAlign: 'left' }}/>

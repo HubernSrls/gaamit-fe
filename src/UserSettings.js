@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { InputGroup, InputGroupButton, Input, Button, Alert } from 'reactstrap';
+import { InputGroup, Input, Button, Alert } from 'reactstrap';
+import steem from 'steem';
 import './UserSettings.css';
 import Api from './Api.js';
 
@@ -8,10 +9,10 @@ export default class ProfileCard extends Component {
     super(props);
 
     this.state = {
-      password: '',
-      confirmPassword: '',
-      postingKey: '',
-      steemitUsername: '',
+      password: null,
+      confirmPassword: null,
+      postingKey: null,
+      steemitUsername: null,
       loading: false,
       showPasswordMismatch: false,
       profileUrl: props.userData.image,
@@ -55,29 +56,59 @@ export default class ProfileCard extends Component {
     this.setState({ loading: true });
 
     let params = {
-      id: '59596642b31ec700119904c7',
-      postingKey: this.state.postingKey,
+      id: this.props.userData.id,
+      postingKey: this.state.postingKey ? this.state.postingKey : null,
+      steemitUsername: this.state.steemitUsername ? this.state.steemitUsername : null,
     }
 
     Api.put(
       Api.methods.settings,
       params,
       (responseJson) => {
-
-        this.setState({
-          loading: false,
-          showSuccess: true
-        });
-
-        console.log(responseJson);
+        console.log("resp ", this.props.userData.id);
+        this.fetchSteemitData(responseJson.steemitUsername);
 
       },
       (error) => {
+        console.log(error);
         this.setState({
           loading: false,
           showError: true
         });
       });
+  }
+
+  fetchSteemitData = (steemitUsername) => {
+    console.log("call ", steemitUsername);
+    steem.api.getAccounts([steemitUsername], (err, result) => {
+
+      if (result[0].json_metadata !== '') {
+        let data = JSON.parse(result[0].json_metadata).profile;
+
+        let userData = {
+          steemitUsername: steemitUsername,
+          name: data.name,
+          image: data.profile_image,
+          location: data.location,
+          website: data.website,
+          about: data.about,
+          votingPower: result[0].voting_power
+        };
+
+        this.props.setSteemitData(userData);
+
+        this.setState({
+          loading: false,
+          showSuccess: true
+        });
+      } else {
+        this.setState({
+          loading: false,
+          showError: true
+        });
+      }
+
+    });
   }
 
   render() {
@@ -168,6 +199,7 @@ export default class ProfileCard extends Component {
 
         {this.state.showSuccess ? successAlert : null}
         {this.state.showError ? errorAlert : null}
+        {this.state.showPasswordMismatch ? passwordMismatchAlert : null}
 
         <Button outline color="primary" className="gaamit-button mt-5" onClick={() => this.onClickSubmit()}>Submit</Button>
       </div>
